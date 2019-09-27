@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Card, CardImg, CardImgOverlay, CardText, CardBody, CardTitle } from 'reactstrap';
 
 class DishDetail extends Component {
+
     constructor(props) {
         super(props);
-        this.state = {};
     }
 
     renderDish(dish) {
@@ -23,27 +23,26 @@ class DishDetail extends Component {
 
     renderComments(comments) {
         if(comments) {
+            
+            const commentItems = comments.map((comment) => {
+                return(
+                    <li key={comment.id}>
+                        <div><br/>{comment.comment}</div>
+                        <div>--{comment.author}, {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(comment.date)))}</div>
+                    </li>
+                );
+            })
+
             return(
                 <div className="col-12 col-md-5 m-1">
                     <h4>Comments</h4>
                     <ul className="list-unstyled">
-                    {comments.map((comment) => {
-                        return(
-                            <li key={comment.id}>
-                                <div>
-                                    <br></br>
-                                    {comment.comment}
-                                </div>
-                                <div>
-                                    --{comment.author}, {comment.date}
-                                </div>
-                            </li>
-                        );
-                    })}
+                        {commentItems}
                     </ul>
                 </div>
             );
         }
+
         else {
             return (
                 <div></div>
@@ -52,11 +51,14 @@ class DishDetail extends Component {
     }
 
     render() {
-        if(this.props.selectedDish) {
+        const dish = this.props.selectedDish;
+        if(dish) {
             return(
-                <div className="row">
-                    {this.renderDish(this.props.selectedDish)}
-                    {this.renderComments(this.props.selectedDish.comments)}
+                <div className="container">
+                    <div className="row">
+                        {this.renderDish(dish)}
+                        {this.renderComments(dish.comments)}
+                    </div>
                 </div>
             );
         }
