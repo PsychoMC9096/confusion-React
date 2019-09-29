@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom'
 import Header from './HeaderComponent';
-import Home from './HomeComponent.js';
+import Home from './HomeComponent';
+import About from './AboutComponent';
 import Menu from './MenuComponent';
 import DishDetail from './DishdetailComponent';
 import Contact from './ContactComponent';
@@ -46,10 +47,11 @@ class Main extends Component {
         <div>
             <Header />
             <Switch>
-                <Route path='/home' component={HomePage} />
+                <Route path='/home' render={HomePage} />
+                <Route path='/aboutus' render={() => <About leaders={this.state.leaders} />} />
                 <Route exact path='/menu' render={() => <Menu dishes={this.state.dishes} />} />
-                <Route path='/menu/:dishId' component={DishWithId} />
-                <Route exact path='/contactus' component={Contact} />
+                <Route path='/menu/:dishId' render={DishWithId} />
+                <Route exact path='/contactus' render={Contact} />
                 <Redirect to="/home" />
             </Switch>
             <Footer />
