@@ -1,13 +1,60 @@
 import React from 'react';
 import { Breadcrumb, BreadcrumbItem, Card, CardBody, CardHeader, Media } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { Loading } from './LoadingComponent.js';
+import { baseUrl } from '../shared/baseUrl';
+import { Fade, Stagger } from 'react-animation-components';
+
+function LeaderList({props}) {
+
+    const leaders = props.leaders.leaders.map((leader) => {
+        return (
+            <Fade in key={leader.id}>
+                <div>
+                    <RenderLeader item={leader} />
+                </div>
+            </Fade>
+        );
+    });
+
+    if (props.leaders.isLoading) {
+        return(
+            <div className="container">
+                <div className="row">            
+                    <Loading />
+                </div>
+            </div>
+        );
+    }
+    else if (props.leaders.errMess) {
+        return(
+            <div className="container">
+                <div className="row"> 
+                    <div className="col-12">
+                        <h4>{props.leaders.errMess}</h4>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+    else{
+        return(
+            <Stagger in>
+                <Media list>
+                    {leaders}
+                </Media>
+            </Stagger>
+        )
+    }
+    
+}
 
 function RenderLeader({item}) {
     return(
         <div key={item.id} className="col-12 mt-5">
             <Media tag="li">
                 <Media left middle>
-                    <Media object src={item.image} alt={item.name} />
+                    <Media object src={baseUrl + item.image} alt={item.name} />
                 </Media>
                 <Media body className="ml-5">
                     <Media heading>{item.name}</Media>
@@ -20,15 +67,6 @@ function RenderLeader({item}) {
 }
 
 function About(props) {
-
-    const leaders = props.leaders.map((leader) => {
-        return (
-            <React.Fragment>
-                <RenderLeader item={leader} />
-            </React.Fragment>
-        );
-    });
-
     return(
         <div className="container">
             <div className="row">
@@ -84,9 +122,7 @@ function About(props) {
                     <h2>Corporate Leadership</h2>
                 </div>
                 <div className="col-12">
-                    <Media list>
-                        {leaders}
-                    </Media>
+                    <LeaderList props={props} />
                 </div>
             </div>
         </div>
